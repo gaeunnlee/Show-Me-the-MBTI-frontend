@@ -151,9 +151,18 @@ const MBTI = [
   ],
 ];
 
+interface DataProps {
+  mbti: string;
+  info: string
+}
+
 export default function Admin() {
   const [step, setStep] = useState(0);
   const [result, setResult] = useState<string[]>([]);
+  const [data, setData] = useState<DataProps>({
+    mbti: '',
+    info: ''
+  });
   const [selected, setSelected] = useState(false);
   const [desc, setDesc] = useState("");
   const navigate = useNavigate();
@@ -177,10 +186,29 @@ export default function Admin() {
     }
   };
 
+  useEffect(()=>{
+    setData((prev)=>{ return {
+      ...prev,
+      info: desc
+    }})
+  },[desc])
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert("추가 완료")
-    navigate('/')
+    
+    fetch(`/mbti`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data) ,
+    }).then(res => {
+      if(res.ok) {
+        alert("추가 완료")
+        // navigate('/list')
+      }
+    })
+    navigate('/mbti')
   };
 
   return (
@@ -244,6 +272,10 @@ export default function Admin() {
               <SubmitButton
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   setSelected(true);
+                  setData((prev:DataProps)=>{ return {
+                    ...prev,
+                    mbti: result.toString().split(",").join(""),
+                  }})
                 }}
               >
                 <FaCheck />

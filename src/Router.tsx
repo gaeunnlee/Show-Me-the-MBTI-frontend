@@ -7,6 +7,7 @@ import Detail from "./pages/Detail";
 import Nav from "./components/Nav";
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
+import List from "./pages/List";
 
 export default function Router() {
   const [intro, setIntro] = useState(true);
@@ -22,6 +23,7 @@ export default function Router() {
         <Route path="/" element={intro ? <Main /> : <Home />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/detail" element={<Detail />} />
+        <Route path="/mbti" element={<List />} />
       </Routes>
     </BrowserRouter>
   );

@@ -57,7 +57,6 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  cursor: pointer;
   p {
     margin: 0;
   }
@@ -84,38 +83,23 @@ const RetryButton = styled.button`
   font-size: 50px;
   cursor: pointer;
 `;
-const SubmitButton = styled.button`
-  color: #fff;
-  font-size: 50px;
-  cursor: pointer;
-`;
-
-const MBTI = [
-  [
-    { char: "I", desc: "내향형" },
-    { char: "E", desc: "외향형" },
-  ],
-  [
-    { char: "N", desc: "감각적" },
-    { char: "S", desc: "직관적" },
-  ],
-  [
-    { char: "T", desc: "이성적" },
-    { char: "F", desc: "감성적" },
-  ],
-  [
-    { char: "P", desc: "인식형" },
-    { char: "J", desc: "판단형" },
-  ],
-];
 
 export default function Detail() {
   const [result, setResult] = useState<String[]>([]);
+  const [info, setInfo] = useState('')
   const navigate = useNavigate();
   const location = useLocation();
-
+  console.log(location)
   useEffect(() => {
     setResult(location.state.mbtiArray);
+      fetch(`/mbti/${location.state.mbti}`)
+          .then((response)=>{
+            return response.json();
+          })
+          .then((data)=>{
+              console.log(data)
+              setInfo(data.info)
+          });
   }, []);
 
   return (
@@ -127,7 +111,7 @@ export default function Detail() {
         <ResultCard>{result[3]}</ResultCard>
       </ResultContainer>
       <CardContainer>
-        <Card>추가 예정</Card>
+        <Card>{info}</Card>
       </CardContainer>
       <ButtonContainer>
         <RetryButton
